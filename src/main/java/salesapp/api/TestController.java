@@ -1,4 +1,4 @@
-package salesapp;
+package salesapp.api;
 
 import javax.annotation.Resource;
 
