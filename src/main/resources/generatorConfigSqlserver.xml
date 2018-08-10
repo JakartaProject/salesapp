@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
 
-	<properties resource="generatorConfig.properties" />
+	<properties resource="generatorConfigSqlserver.properties" />
 
 	<!-- classPathEntry:数据库的JDBC驱动的jar包地址 -->
 	<classPathEntry location="${classPath}" />

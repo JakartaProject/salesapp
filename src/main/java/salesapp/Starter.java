@@ -40,8 +40,6 @@ public class Starter {
 				throws Exception {
 			SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
 			bean.setDataSource(dataSource);
-//			bean.setMapperLocations(
-//					new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/sales/*.xml"));
 			return bean.getObject();
 		}
 
@@ -56,6 +54,36 @@ public class Starter {
 		@Primary
 		public SqlSessionTemplate testSqlSessionTemplate(
 				@Qualifier("salesSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+			return new SqlSessionTemplate(sqlSessionFactory);
+		}
+	}
+
+	@Configuration
+	@MapperScan(basePackages = "salesapp.roommybatis.mapper", sqlSessionTemplateRef = "roomSqlSessionTemplate")
+	public static class DataSourceRoomsConfig {
+		@Bean(name = "roomDataSource")
+		@ConfigurationProperties(prefix = "spring.datasource.room")
+		public DataSource testDataSource() {
+			return DataSourceBuilder.create().build();
+		}
+
+		@Bean(name = "roomSqlSessionFactory")
+		public SqlSessionFactory testSqlSessionFactory(@Qualifier("roomDataSource") DataSource dataSource)
+				throws Exception {
+			SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+			bean.setDataSource(dataSource);
+			return bean.getObject();
+		}
+
+		@Bean(name = "roomTransactionManager")
+		public DataSourceTransactionManager testTransactionManager(
+				@Qualifier("roomDataSource") DataSource dataSource) {
+			return new DataSourceTransactionManager(dataSource);
+		}
+
+		@Bean(name = "roomSqlSessionTemplate")
+		public SqlSessionTemplate testSqlSessionTemplate(
+				@Qualifier("roomSqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
 			return new SqlSessionTemplate(sqlSessionFactory);
 		}
 	}
