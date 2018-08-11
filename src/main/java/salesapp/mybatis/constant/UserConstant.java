@@ -21,6 +21,10 @@ public class UserConstant {
 			}
 			throw new RuntimeException();
 		}
+		
+		public int level() {
+			return 3-flag();
+		}
 
 		public UserRole nextLevel() {
 			switch (this) {
@@ -56,6 +60,50 @@ public class UserConstant {
 			for (UserStatus role : UserStatus.values()) {
 				if (role.flag() == flag) {
 					return role;
+				}
+			}
+			throw new RuntimeException();
+		}
+	}
+	
+	public static enum CustomerStatus {
+		POOL(0), SHORT_ASSOCIATED(1), LONG_ASSOCIATED(2);
+		private int flag;
+
+		CustomerStatus(int flag) {
+			this.flag = flag;
+		}
+
+		public int flag() {
+			return flag;
+		}
+
+		public static CustomerStatus type(int flag) {
+			for (CustomerStatus type : CustomerStatus.values()) {
+				if (type.flag() == flag) {
+					return type;
+				}
+			}
+			throw new RuntimeException();
+		}
+	}
+	
+	public static enum CustomerAssociatedType {
+		RECV_SELF(1), ALLOCATED(2);
+		private int flag;
+
+		CustomerAssociatedType(int flag) {
+			this.flag = flag;
+		}
+
+		public int flag() {
+			return flag;
+		}
+
+		public static CustomerAssociatedType type(int flag) {
+			for (CustomerAssociatedType type : CustomerAssociatedType.values()) {
+				if (type.flag() == flag) {
+					return type;
 				}
 			}
 			throw new RuntimeException();

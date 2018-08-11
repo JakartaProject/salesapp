@@ -36,6 +36,10 @@ public class UserSqlProvider {
             VALUES("user_pwd", "#{userPwd,jdbcType=VARCHAR}");
         }
         
+        if (record.getUserInitPwd() != null) {
+            VALUES("user_init_pwd", "#{userInitPwd,jdbcType=VARCHAR}");
+        }
+        
         if (record.getUserRole() != null) {
             VALUES("user_role", "#{userRole,jdbcType=INTEGER}");
         }
@@ -81,6 +85,10 @@ public class UserSqlProvider {
         
         if (record.getUserPwd() != null) {
             SET("user_pwd = #{userPwd,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUserInitPwd() != null) {
+            SET("user_init_pwd = #{userInitPwd,jdbcType=VARCHAR}");
         }
         
         if (record.getUserRole() != null) {

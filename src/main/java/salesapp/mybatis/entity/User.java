@@ -14,6 +14,8 @@ public class User implements Serializable {
 
     private String userPwd;
 
+    private String userInitPwd;
+
     private Integer userRole;
 
     private String userUp;
@@ -66,6 +68,14 @@ public class User implements Serializable {
 
     public void setUserPwd(String userPwd) {
         this.userPwd = userPwd;
+    }
+
+    public String getUserInitPwd() {
+        return userInitPwd;
+    }
+
+    public void setUserInitPwd(String userInitPwd) {
+        this.userInitPwd = userInitPwd;
     }
 
     public Integer getUserRole() {

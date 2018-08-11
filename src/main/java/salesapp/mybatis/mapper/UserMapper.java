@@ -21,16 +21,16 @@ public interface UserMapper {
     @Insert({
         "insert into user (user_id, user_name, ",
         "user_mobile, user_account, ",
-        "user_pwd, user_role, ",
-        "user_up, user_status, ",
-        "user_remark, mysoft_user_code, ",
-        "ct)",
+        "user_pwd, user_init_pwd, ",
+        "user_role, user_up, ",
+        "user_status, user_remark, ",
+        "mysoft_user_code, ct)",
         "values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, ",
         "#{userMobile,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, ",
-        "#{userPwd,jdbcType=VARCHAR}, #{userRole,jdbcType=INTEGER}, ",
-        "#{userUp,jdbcType=VARCHAR}, #{userStatus,jdbcType=INTEGER}, ",
-        "#{userRemark,jdbcType=VARCHAR}, #{mysoftUserCode,jdbcType=VARCHAR}, ",
-        "#{ct,jdbcType=TIMESTAMP})"
+        "#{userPwd,jdbcType=VARCHAR}, #{userInitPwd,jdbcType=VARCHAR}, ",
+        "#{userRole,jdbcType=INTEGER}, #{userUp,jdbcType=VARCHAR}, ",
+        "#{userStatus,jdbcType=INTEGER}, #{userRemark,jdbcType=VARCHAR}, ",
+        "#{mysoftUserCode,jdbcType=VARCHAR}, #{ct,jdbcType=TIMESTAMP})"
     })
     int insert(User record);
 
@@ -39,8 +39,8 @@ public interface UserMapper {
 
     @Select({
         "select",
-        "user_id, user_name, user_mobile, user_account, user_pwd, user_role, user_up, ",
-        "user_status, user_remark, mysoft_user_code, ct",
+        "user_id, user_name, user_mobile, user_account, user_pwd, user_init_pwd, user_role, ",
+        "user_up, user_status, user_remark, mysoft_user_code, ct",
         "from user",
         "where user_id = #{userId,jdbcType=VARCHAR}"
     })
@@ -50,6 +50,7 @@ public interface UserMapper {
         @Result(column="user_mobile", property="userMobile", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_account", property="userAccount", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_pwd", property="userPwd", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_init_pwd", property="userInitPwd", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_role", property="userRole", jdbcType=JdbcType.INTEGER),
         @Result(column="user_up", property="userUp", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_status", property="userStatus", jdbcType=JdbcType.INTEGER),
@@ -68,6 +69,7 @@ public interface UserMapper {
           "user_mobile = #{userMobile,jdbcType=VARCHAR},",
           "user_account = #{userAccount,jdbcType=VARCHAR},",
           "user_pwd = #{userPwd,jdbcType=VARCHAR},",
+          "user_init_pwd = #{userInitPwd,jdbcType=VARCHAR},",
           "user_role = #{userRole,jdbcType=INTEGER},",
           "user_up = #{userUp,jdbcType=VARCHAR},",
           "user_status = #{userStatus,jdbcType=INTEGER},",
