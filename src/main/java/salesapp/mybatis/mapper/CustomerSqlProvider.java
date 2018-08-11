@@ -17,7 +17,7 @@ public class CustomerSqlProvider {
         INSERT_INTO("customer");
         
         if (record.getCustomerId() != null) {
-            VALUES("customer_id", "#{customerId,jdbcType=BIGINT}");
+            VALUES("customer_id", "#{customerId,jdbcType=VARCHAR}");
         }
         
         if (record.getCustomerName() != null) {
@@ -53,11 +53,11 @@ public class CustomerSqlProvider {
         }
         
         if (record.getAssociatedUserId() != null) {
-            VALUES("associated_user_id", "#{associatedUserId,jdbcType=BIGINT}");
+            VALUES("associated_user_id", "#{associatedUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFirstUserId() != null) {
-            VALUES("first_user_id", "#{firstUserId,jdbcType=BIGINT}");
+            VALUES("first_user_id", "#{firstUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFirstRecvTime() != null) {
@@ -108,11 +108,11 @@ public class CustomerSqlProvider {
         }
         
         if (record.getAssociatedUserId() != null) {
-            SET("associated_user_id = #{associatedUserId,jdbcType=BIGINT}");
+            SET("associated_user_id = #{associatedUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFirstUserId() != null) {
-            SET("first_user_id = #{firstUserId,jdbcType=BIGINT}");
+            SET("first_user_id = #{firstUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFirstRecvTime() != null) {
@@ -123,7 +123,7 @@ public class CustomerSqlProvider {
             SET("last_comment_time = #{lastCommentTime,jdbcType=TIMESTAMP}");
         }
         
-        WHERE("customer_id = #{customerId,jdbcType=BIGINT}");
+        WHERE("customer_id = #{customerId,jdbcType=VARCHAR}");
         
         return SQL();
     }

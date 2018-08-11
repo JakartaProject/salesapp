@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Customer implements Serializable {
-    private Long customerId;
+    private String customerId;
 
     private String customerName;
 
@@ -22,9 +22,9 @@ public class Customer implements Serializable {
 
     private Integer associatedType;
 
-    private Long associatedUserId;
+    private String associatedUserId;
 
-    private Long firstUserId;
+    private String firstUserId;
 
     private Date firstRecvTime;
 
@@ -32,11 +32,11 @@ public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
@@ -104,19 +104,19 @@ public class Customer implements Serializable {
         this.associatedType = associatedType;
     }
 
-    public Long getAssociatedUserId() {
+    public String getAssociatedUserId() {
         return associatedUserId;
     }
 
-    public void setAssociatedUserId(Long associatedUserId) {
+    public void setAssociatedUserId(String associatedUserId) {
         this.associatedUserId = associatedUserId;
     }
 
-    public Long getFirstUserId() {
+    public String getFirstUserId() {
         return firstUserId;
     }
 
-    public void setFirstUserId(Long firstUserId) {
+    public void setFirstUserId(String firstUserId) {
         this.firstUserId = firstUserId;
     }
 

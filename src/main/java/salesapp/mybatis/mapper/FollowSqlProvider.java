@@ -17,15 +17,15 @@ public class FollowSqlProvider {
         INSERT_INTO("follow");
         
         if (record.getFollowId() != null) {
-            VALUES("follow_id", "#{followId,jdbcType=BIGINT}");
+            VALUES("follow_id", "#{followId,jdbcType=VARCHAR}");
         }
         
         if (record.getCustomerId() != null) {
-            VALUES("customer_id", "#{customerId,jdbcType=BIGINT}");
+            VALUES("customer_id", "#{customerId,jdbcType=VARCHAR}");
         }
         
         if (record.getFollowUserId() != null) {
-            VALUES("follow_user_id", "#{followUserId,jdbcType=BIGINT}");
+            VALUES("follow_user_id", "#{followUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFollowType() != null) {
@@ -48,11 +48,11 @@ public class FollowSqlProvider {
         UPDATE("follow");
         
         if (record.getCustomerId() != null) {
-            SET("customer_id = #{customerId,jdbcType=BIGINT}");
+            SET("customer_id = #{customerId,jdbcType=VARCHAR}");
         }
         
         if (record.getFollowUserId() != null) {
-            SET("follow_user_id = #{followUserId,jdbcType=BIGINT}");
+            SET("follow_user_id = #{followUserId,jdbcType=VARCHAR}");
         }
         
         if (record.getFollowType() != null) {
@@ -67,7 +67,7 @@ public class FollowSqlProvider {
             SET("follow_time = #{followTime,jdbcType=TIMESTAMP}");
         }
         
-        WHERE("follow_id = #{followId,jdbcType=BIGINT}");
+        WHERE("follow_id = #{followId,jdbcType=VARCHAR}");
         
         return SQL();
     }

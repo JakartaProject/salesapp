@@ -17,7 +17,7 @@ public class UserSqlProvider {
         INSERT_INTO("user");
         
         if (record.getUserId() != null) {
-            VALUES("user_id", "#{userId,jdbcType=BIGINT}");
+            VALUES("user_id", "#{userId,jdbcType=VARCHAR}");
         }
         
         if (record.getUserName() != null) {
@@ -41,11 +41,15 @@ public class UserSqlProvider {
         }
         
         if (record.getUserUp() != null) {
-            VALUES("user_up", "#{userUp,jdbcType=BIGINT}");
+            VALUES("user_up", "#{userUp,jdbcType=VARCHAR}");
         }
         
         if (record.getUserStatus() != null) {
             VALUES("user_status", "#{userStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getUserRemark() != null) {
+            VALUES("user_remark", "#{userRemark,jdbcType=VARCHAR}");
         }
         
         if (record.getMysoftUserCode() != null) {
@@ -84,11 +88,15 @@ public class UserSqlProvider {
         }
         
         if (record.getUserUp() != null) {
-            SET("user_up = #{userUp,jdbcType=BIGINT}");
+            SET("user_up = #{userUp,jdbcType=VARCHAR}");
         }
         
         if (record.getUserStatus() != null) {
             SET("user_status = #{userStatus,jdbcType=INTEGER}");
+        }
+        
+        if (record.getUserRemark() != null) {
+            SET("user_remark = #{userRemark,jdbcType=VARCHAR}");
         }
         
         if (record.getMysoftUserCode() != null) {
@@ -99,7 +107,7 @@ public class UserSqlProvider {
             SET("ct = #{ct,jdbcType=TIMESTAMP}");
         }
         
-        WHERE("user_id = #{userId,jdbcType=BIGINT}");
+        WHERE("user_id = #{userId,jdbcType=VARCHAR}");
         
         return SQL();
     }

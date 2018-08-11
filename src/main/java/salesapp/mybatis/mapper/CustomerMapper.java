@@ -14,9 +14,9 @@ import salesapp.mybatis.entity.Customer;
 public interface CustomerMapper {
     @Delete({
         "delete from customer",
-        "where customer_id = #{customerId,jdbcType=BIGINT}"
+        "where customer_id = #{customerId,jdbcType=VARCHAR}"
     })
-    int deleteByPrimaryKey(Long customerId);
+    int deleteByPrimaryKey(String customerId);
 
     @Insert({
         "insert into customer (customer_id, customer_name, ",
@@ -26,12 +26,12 @@ public interface CustomerMapper {
         "associated_type, associated_user_id, ",
         "first_user_id, first_recv_time, ",
         "last_comment_time)",
-        "values (#{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, ",
+        "values (#{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, ",
         "#{customerMobile,jdbcType=VARCHAR}, #{customerSocialid,jdbcType=VARCHAR}, ",
         "#{customerGender,jdbcType=INTEGER}, #{customerEmail,jdbcType=VARCHAR}, ",
         "#{customerAddress,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, ",
-        "#{associatedType,jdbcType=INTEGER}, #{associatedUserId,jdbcType=BIGINT}, ",
-        "#{firstUserId,jdbcType=BIGINT}, #{firstRecvTime,jdbcType=TIMESTAMP}, ",
+        "#{associatedType,jdbcType=INTEGER}, #{associatedUserId,jdbcType=VARCHAR}, ",
+        "#{firstUserId,jdbcType=VARCHAR}, #{firstRecvTime,jdbcType=TIMESTAMP}, ",
         "#{lastCommentTime,jdbcType=TIMESTAMP})"
     })
     int insert(Customer record);
@@ -45,10 +45,10 @@ public interface CustomerMapper {
         "customer_email, customer_address, status, associated_type, associated_user_id, ",
         "first_user_id, first_recv_time, last_comment_time",
         "from customer",
-        "where customer_id = #{customerId,jdbcType=BIGINT}"
+        "where customer_id = #{customerId,jdbcType=VARCHAR}"
     })
     @Results({
-        @Result(column="customer_id", property="customerId", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="customer_id", property="customerId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="customer_name", property="customerName", jdbcType=JdbcType.VARCHAR),
         @Result(column="customer_mobile", property="customerMobile", jdbcType=JdbcType.VARCHAR),
         @Result(column="customer_socialid", property="customerSocialid", jdbcType=JdbcType.VARCHAR),
@@ -57,12 +57,12 @@ public interface CustomerMapper {
         @Result(column="customer_address", property="customerAddress", jdbcType=JdbcType.VARCHAR),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
         @Result(column="associated_type", property="associatedType", jdbcType=JdbcType.INTEGER),
-        @Result(column="associated_user_id", property="associatedUserId", jdbcType=JdbcType.BIGINT),
-        @Result(column="first_user_id", property="firstUserId", jdbcType=JdbcType.BIGINT),
+        @Result(column="associated_user_id", property="associatedUserId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="first_user_id", property="firstUserId", jdbcType=JdbcType.VARCHAR),
         @Result(column="first_recv_time", property="firstRecvTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="last_comment_time", property="lastCommentTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    Customer selectByPrimaryKey(Long customerId);
+    Customer selectByPrimaryKey(String customerId);
 
     @UpdateProvider(type=CustomerSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Customer record);
@@ -77,11 +77,11 @@ public interface CustomerMapper {
           "customer_address = #{customerAddress,jdbcType=VARCHAR},",
           "status = #{status,jdbcType=INTEGER},",
           "associated_type = #{associatedType,jdbcType=INTEGER},",
-          "associated_user_id = #{associatedUserId,jdbcType=BIGINT},",
-          "first_user_id = #{firstUserId,jdbcType=BIGINT},",
+          "associated_user_id = #{associatedUserId,jdbcType=VARCHAR},",
+          "first_user_id = #{firstUserId,jdbcType=VARCHAR},",
           "first_recv_time = #{firstRecvTime,jdbcType=TIMESTAMP},",
           "last_comment_time = #{lastCommentTime,jdbcType=TIMESTAMP}",
-        "where customer_id = #{customerId,jdbcType=BIGINT}"
+        "where customer_id = #{customerId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Customer record);
 }

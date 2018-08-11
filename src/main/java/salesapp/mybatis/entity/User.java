@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class User implements Serializable {
-    private Long userId;
+    private String userId;
 
     private String userName;
 
@@ -16,9 +16,11 @@ public class User implements Serializable {
 
     private Integer userRole;
 
-    private Long userUp;
+    private String userUp;
 
     private Integer userStatus;
+
+    private String userRemark;
 
     private String mysoftUserCode;
 
@@ -26,11 +28,11 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -74,11 +76,11 @@ public class User implements Serializable {
         this.userRole = userRole;
     }
 
-    public Long getUserUp() {
+    public String getUserUp() {
         return userUp;
     }
 
-    public void setUserUp(Long userUp) {
+    public void setUserUp(String userUp) {
         this.userUp = userUp;
     }
 
@@ -88,6 +90,14 @@ public class User implements Serializable {
 
     public void setUserStatus(Integer userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getUserRemark() {
+        return userRemark;
+    }
+
+    public void setUserRemark(String userRemark) {
+        this.userRemark = userRemark;
     }
 
     public String getMysoftUserCode() {

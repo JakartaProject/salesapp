@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Follow implements Serializable {
-    private Long followId;
+    private String followId;
 
-    private Long customerId;
+    private String customerId;
 
-    private Long followUserId;
+    private String followUserId;
 
     private Integer followType;
 
@@ -18,27 +18,27 @@ public class Follow implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getFollowId() {
+    public String getFollowId() {
         return followId;
     }
 
-    public void setFollowId(Long followId) {
+    public void setFollowId(String followId) {
         this.followId = followId;
     }
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
-    public Long getFollowUserId() {
+    public String getFollowUserId() {
         return followUserId;
     }
 
-    public void setFollowUserId(Long followUserId) {
+    public void setFollowUserId(String followUserId) {
         this.followUserId = followUserId;
     }
 

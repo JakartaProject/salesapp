@@ -14,16 +14,16 @@ import salesapp.mybatis.entity.Follow;
 public interface FollowMapper {
     @Delete({
         "delete from follow",
-        "where follow_id = #{followId,jdbcType=BIGINT}"
+        "where follow_id = #{followId,jdbcType=VARCHAR}"
     })
-    int deleteByPrimaryKey(Long followId);
+    int deleteByPrimaryKey(String followId);
 
     @Insert({
         "insert into follow (follow_id, customer_id, ",
         "follow_user_id, follow_type, ",
         "follow_content, follow_time)",
-        "values (#{followId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, ",
-        "#{followUserId,jdbcType=BIGINT}, #{followType,jdbcType=INTEGER}, ",
+        "values (#{followId,jdbcType=VARCHAR}, #{customerId,jdbcType=VARCHAR}, ",
+        "#{followUserId,jdbcType=VARCHAR}, #{followType,jdbcType=INTEGER}, ",
         "#{followContent,jdbcType=VARCHAR}, #{followTime,jdbcType=TIMESTAMP})"
     })
     int insert(Follow record);
@@ -35,29 +35,29 @@ public interface FollowMapper {
         "select",
         "follow_id, customer_id, follow_user_id, follow_type, follow_content, follow_time",
         "from follow",
-        "where follow_id = #{followId,jdbcType=BIGINT}"
+        "where follow_id = #{followId,jdbcType=VARCHAR}"
     })
     @Results({
-        @Result(column="follow_id", property="followId", jdbcType=JdbcType.BIGINT, id=true),
-        @Result(column="customer_id", property="customerId", jdbcType=JdbcType.BIGINT),
-        @Result(column="follow_user_id", property="followUserId", jdbcType=JdbcType.BIGINT),
+        @Result(column="follow_id", property="followId", jdbcType=JdbcType.VARCHAR, id=true),
+        @Result(column="customer_id", property="customerId", jdbcType=JdbcType.VARCHAR),
+        @Result(column="follow_user_id", property="followUserId", jdbcType=JdbcType.VARCHAR),
         @Result(column="follow_type", property="followType", jdbcType=JdbcType.INTEGER),
         @Result(column="follow_content", property="followContent", jdbcType=JdbcType.VARCHAR),
         @Result(column="follow_time", property="followTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    Follow selectByPrimaryKey(Long followId);
+    Follow selectByPrimaryKey(String followId);
 
     @UpdateProvider(type=FollowSqlProvider.class, method="updateByPrimaryKeySelective")
     int updateByPrimaryKeySelective(Follow record);
 
     @Update({
         "update follow",
-        "set customer_id = #{customerId,jdbcType=BIGINT},",
-          "follow_user_id = #{followUserId,jdbcType=BIGINT},",
+        "set customer_id = #{customerId,jdbcType=VARCHAR},",
+          "follow_user_id = #{followUserId,jdbcType=VARCHAR},",
           "follow_type = #{followType,jdbcType=INTEGER},",
           "follow_content = #{followContent,jdbcType=VARCHAR},",
           "follow_time = #{followTime,jdbcType=TIMESTAMP}",
-        "where follow_id = #{followId,jdbcType=BIGINT}"
+        "where follow_id = #{followId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Follow record);
 }
