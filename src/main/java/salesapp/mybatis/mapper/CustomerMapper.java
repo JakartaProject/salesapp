@@ -25,14 +25,14 @@ public interface CustomerMapper {
         "customer_address, status, ",
         "associated_type, associated_user_id, ",
         "first_user_id, first_recv_time, ",
-        "last_comment_time)",
+        "last_follow_time, last_follow_id)",
         "values (#{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, ",
         "#{customerMobile,jdbcType=VARCHAR}, #{customerSocialid,jdbcType=VARCHAR}, ",
         "#{customerGender,jdbcType=INTEGER}, #{customerEmail,jdbcType=VARCHAR}, ",
         "#{customerAddress,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, ",
         "#{associatedType,jdbcType=INTEGER}, #{associatedUserId,jdbcType=VARCHAR}, ",
         "#{firstUserId,jdbcType=VARCHAR}, #{firstRecvTime,jdbcType=TIMESTAMP}, ",
-        "#{lastCommentTime,jdbcType=TIMESTAMP})"
+        "#{lastFollowTime,jdbcType=TIMESTAMP}, #{lastFollowId,jdbcType=VARCHAR})"
     })
     int insert(Customer record);
 
@@ -43,7 +43,7 @@ public interface CustomerMapper {
         "select",
         "customer_id, customer_name, customer_mobile, customer_socialid, customer_gender, ",
         "customer_email, customer_address, status, associated_type, associated_user_id, ",
-        "first_user_id, first_recv_time, last_comment_time",
+        "first_user_id, first_recv_time, last_follow_time, last_follow_id",
         "from customer",
         "where customer_id = #{customerId,jdbcType=VARCHAR}"
     })
@@ -60,7 +60,8 @@ public interface CustomerMapper {
         @Result(column="associated_user_id", property="associatedUserId", jdbcType=JdbcType.VARCHAR),
         @Result(column="first_user_id", property="firstUserId", jdbcType=JdbcType.VARCHAR),
         @Result(column="first_recv_time", property="firstRecvTime", jdbcType=JdbcType.TIMESTAMP),
-        @Result(column="last_comment_time", property="lastCommentTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="last_follow_time", property="lastFollowTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="last_follow_id", property="lastFollowId", jdbcType=JdbcType.VARCHAR)
     })
     Customer selectByPrimaryKey(String customerId);
 
@@ -80,7 +81,8 @@ public interface CustomerMapper {
           "associated_user_id = #{associatedUserId,jdbcType=VARCHAR},",
           "first_user_id = #{firstUserId,jdbcType=VARCHAR},",
           "first_recv_time = #{firstRecvTime,jdbcType=TIMESTAMP},",
-          "last_comment_time = #{lastCommentTime,jdbcType=TIMESTAMP}",
+          "last_follow_time = #{lastFollowTime,jdbcType=TIMESTAMP},",
+          "last_follow_id = #{lastFollowId,jdbcType=VARCHAR}",
         "where customer_id = #{customerId,jdbcType=VARCHAR}"
     })
     int updateByPrimaryKey(Customer record);

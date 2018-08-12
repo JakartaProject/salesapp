@@ -109,4 +109,26 @@ public class UserConstant {
 			throw new RuntimeException();
 		}
 	}
+	
+	public static enum FollowType {
+		COMMON(0), LOCK(1), UNLOCK(2);
+		private int flag;
+
+		FollowType(int flag) {
+			this.flag = flag;
+		}
+
+		public int flag() {
+			return flag;
+		}
+
+		public static FollowType type(int flag) {
+			for (FollowType type : FollowType.values()) {
+				if (type.flag() == flag) {
+					return type;
+				}
+			}
+			throw new RuntimeException();
+		}
+	}
 }

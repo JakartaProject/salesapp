@@ -10,6 +10,8 @@ public class User implements Serializable {
 
     private String userMobile;
 
+    private String userPosition;
+
     private String userAccount;
 
     private String userPwd;
@@ -52,6 +54,14 @@ public class User implements Serializable {
 
     public void setUserMobile(String userMobile) {
         this.userMobile = userMobile;
+    }
+
+    public String getUserPosition() {
+        return userPosition;
+    }
+
+    public void setUserPosition(String userPosition) {
+        this.userPosition = userPosition;
     }
 
     public String getUserAccount() {

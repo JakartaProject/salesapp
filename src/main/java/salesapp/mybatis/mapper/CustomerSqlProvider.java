@@ -64,8 +64,12 @@ public class CustomerSqlProvider {
             VALUES("first_recv_time", "#{firstRecvTime,jdbcType=TIMESTAMP}");
         }
         
-        if (record.getLastCommentTime() != null) {
-            VALUES("last_comment_time", "#{lastCommentTime,jdbcType=TIMESTAMP}");
+        if (record.getLastFollowTime() != null) {
+            VALUES("last_follow_time", "#{lastFollowTime,jdbcType=TIMESTAMP}");
+        }
+        
+        if (record.getLastFollowId() != null) {
+            VALUES("last_follow_id", "#{lastFollowId,jdbcType=VARCHAR}");
         }
         
         return SQL();
@@ -119,8 +123,12 @@ public class CustomerSqlProvider {
             SET("first_recv_time = #{firstRecvTime,jdbcType=TIMESTAMP}");
         }
         
-        if (record.getLastCommentTime() != null) {
-            SET("last_comment_time = #{lastCommentTime,jdbcType=TIMESTAMP}");
+        if (record.getLastFollowTime() != null) {
+            SET("last_follow_time = #{lastFollowTime,jdbcType=TIMESTAMP}");
+        }
+        
+        if (record.getLastFollowId() != null) {
+            SET("last_follow_id = #{lastFollowId,jdbcType=VARCHAR}");
         }
         
         WHERE("customer_id = #{customerId,jdbcType=VARCHAR}");

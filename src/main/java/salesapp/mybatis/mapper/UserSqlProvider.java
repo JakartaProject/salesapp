@@ -28,6 +28,10 @@ public class UserSqlProvider {
             VALUES("user_mobile", "#{userMobile,jdbcType=VARCHAR}");
         }
         
+        if (record.getUserPosition() != null) {
+            VALUES("user_position", "#{userPosition,jdbcType=VARCHAR}");
+        }
+        
         if (record.getUserAccount() != null) {
             VALUES("user_account", "#{userAccount,jdbcType=VARCHAR}");
         }
@@ -77,6 +81,10 @@ public class UserSqlProvider {
         
         if (record.getUserMobile() != null) {
             SET("user_mobile = #{userMobile,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUserPosition() != null) {
+            SET("user_position = #{userPosition,jdbcType=VARCHAR}");
         }
         
         if (record.getUserAccount() != null) {

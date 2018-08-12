@@ -93,10 +93,11 @@ public class UserService {
 		return new MktResp<Void>();
 	}
 	
-	public MktResp<Void> updateName(String userId, String newName, String newMobile) {
+	public MktResp<Void> updateAccount(String userId, String newName, String newMobile, String position) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
 		user.setUserName(newName);
 		user.setUserMobile(newMobile);
+		user.setUserPosition(position);
 		userMapperEx.updateByPrimaryKey(user);
 		return new MktResp<Void>();
 	}
@@ -123,7 +124,7 @@ public class UserService {
 			// transfer all customer to pool
 			String generalUserId = userMapperEx.selectByPrimaryKey(operId).getUserUp();
 			List<Customer> customers = customerMapperEx
-					.selectAssociatedCustomerByUser(Arrays.asList(new String[] { userId }));
+					.selectAssociatedCustomerByUser(Arrays.asList(new String[] { userId }), null);
 			customers.forEach(c -> {
 				c.setAssociatedType(CustomerAssociatedType.ALLOCATED.flag());
 				c.setAssociatedUserId(generalUserId);
@@ -198,7 +199,7 @@ public class UserService {
 			numInfo.setSellerNum(users.size());
 		}
 		if (role.compare(UserRole.SELLER) >= 0) {
-			List<Customer> customers = customerMapperEx.selectAssociatedCustomerByUser(ids);
+			List<Customer> customers = customerMapperEx.selectAssociatedCustomerByUser(ids, null);
 			numInfo.setCustomerNum(customers.size());
 		}
 		return numInfo;

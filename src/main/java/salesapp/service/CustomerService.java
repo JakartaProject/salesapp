@@ -10,14 +10,19 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import salesapp.mybatis.constant.UserConstant.CustomerAssociatedType;
 import salesapp.mybatis.constant.UserConstant.CustomerStatus;
+import salesapp.mybatis.constant.UserConstant.FollowType;
 import salesapp.mybatis.constant.UserConstant.UserRole;
 import salesapp.mybatis.entity.Customer;
+import salesapp.mybatis.entity.CustomerEx;
 import salesapp.mybatis.entity.Follow;
+import salesapp.mybatis.entity.FollowEx;
 import salesapp.mybatis.entity.User;
 import salesapp.mybatis.mapper.CustomerMapperEx;
+import salesapp.mybatis.mapper.FollowMapperEx;
 import salesapp.mybatis.mapper.UserMapperEx;
 import salesapp.util.UUID;
 
@@ -27,8 +32,11 @@ public class CustomerService {
 	private CustomerMapperEx customerMapperEx;
 	@Resource
 	private UserMapperEx userMapperEx;
+	@Resource
+	private FollowMapperEx followMapperEx;
 
-	public MktResp<Customer> addCustomer(String userId, String name, String mobile, String socialId, String gender,
+	@Transactional(transactionManager = "salesTransactionManager")
+	public MktResp<Customer> addCustomer(String userId, String name, String mobile, String socialId, int gender,
 			String email, String address) {
 		Customer customer = customerMapperEx.selectByMobileAndSocialId(mobile, socialId);
 		if (customer != null) {
@@ -43,20 +51,19 @@ public class CustomerService {
 		customer.setAssociatedUserId(userId);
 		customer.setCustomerAddress(address);
 		customer.setCustomerEmail(email);
-		customer.setCustomerGender(gender.equals("male") ? 1 : 0);
+		customer.setCustomerGender(gender);
 		customer.setCustomerId(UUID.get20());
 		customer.setCustomerMobile(mobile.trim());
 		customer.setCustomerName(name.trim().toLowerCase());
 		customer.setCustomerSocialid(socialId.trim());
 		customer.setFirstRecvTime(new Date());
 		customer.setFirstUserId(userId);
-		customer.setLastCommentTime(new Date());
 		customer.setStatus(CustomerStatus.SHORT_ASSOCIATED.flag());
 		customerMapperEx.insertSelective(customer);
 		return new MktResp<Customer>(customer);
 	}
-	
-	public MktResp<List<Customer>> myCustomer(String userId) {
+
+	public MktResp<List<CustomerEx>> myCustomer(String userId) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
 		UserRole role = UserRole.role(user.getUserRole());
 		Set<String> allids = new HashSet<String>(Arrays.asList(new String[] { userId }));
@@ -69,40 +76,41 @@ public class CustomerService {
 				ids.add(next.getUserId());
 			});
 		}
-		return new MktResp<List<Customer>>(customerMapperEx.selectMyCustomerOrderByFollowTime(allids));
+		return new MktResp<List<CustomerEx>>(customerMapperEx.selectMyCustomerOrderByFollowTime(allids));
 	}
-	
+
 	public MktResp<CustomerInfo> customerInfo(String userId, String customerId) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
-		UserRole role = UserRole.role(user.getUserRole());
-		Customer customer = customerMapperEx.selectByPrimaryKey(customerId);
-		
+		CustomerEx customer = customerMapperEx.selectExByPrimaryKey(customerId);
+		List<FollowEx> fs = followMapperEx.selectByCustomerId(customerId);
 		CustomerInfo info = new CustomerInfo();
-		info.setCustomer(customer);
+		info.setCustomerEx(customer);
+		info.setFollowEx(fs);
 		return new MktResp<CustomerInfo>();
 	}
-	
-	public static class CustomerInfo {
-		private Customer customer;
-		private List<Follow> follow;
 
-		public Customer getCustomer() {
+	public static class CustomerInfo {
+		private CustomerEx customer;
+		private List<FollowEx> follow;
+
+		public CustomerEx getCustomerEx() {
 			return customer;
 		}
 
-		public void setCustomer(Customer customer) {
+		public void setCustomerEx(CustomerEx customer) {
 			this.customer = customer;
 		}
 
-		public List<Follow> getFollow() {
+		public List<FollowEx> getFollowEx() {
 			return follow;
 		}
 
-		public void setFollow(List<Follow> follow) {
+		public void setFollowEx(List<FollowEx> follow) {
 			this.follow = follow;
 		}
 	}
 
+	@Transactional(transactionManager = "salesTransactionManager")
 	public MktResp<List<Customer>> searchCustomer(String userId, final String str) {
 		if (str.length() < 4) {
 			// avoid large scale result
@@ -135,5 +143,62 @@ public class CustomerService {
 			}
 		});
 		return new MktResp<List<Customer>>(ret);
+	}
+
+	@Transactional(transactionManager = "salesTransactionManager")
+	public MktResp<Void> follow(String userId, String customerId, String content) {
+		User user = userMapperEx.selectByPrimaryKey(userId);
+		Customer customer = customerMapperEx.selectByPrimaryKey(customerId);
+		if (user == null || customer == null) {
+			return MktResp.errorResp("error system");
+		}
+		Follow f = new Follow();
+		f.setCustomerId(customerId);
+		f.setFollowContent(content.trim());
+		f.setFollowId(UUID.get20());
+		f.setFollowTime(new Date());
+		f.setFollowType(FollowType.COMMON.flag());
+		f.setFollowUserId(userId);
+		followMapperEx.insert(f);
+		customer.setLastFollowId(f.getFollowId());
+		customer.setLastFollowTime(new Date());
+		customerMapperEx.updateByPrimaryKeySelective(customer);
+		return new MktResp<Void>();
+	}
+
+	public MktResp<List<Customer>> customerPool(String userId, String str) {
+		User user = userMapperEx.selectByPrimaryKey(userId);
+		UserRole role = UserRole.role(user.getUserRole());
+		if (role.compare(UserRole.MANAGER) < 0) {
+			return MktResp.errorResp("no permission");
+		}
+		if (str == null || str.trim().length() < 4) {
+			str = null;
+		}
+		List<Customer> list = customerMapperEx.selectAssociatedCustomerByUser(Arrays.asList(new String[] { userId }),
+				str.trim());
+		return new MktResp<List<Customer>>(list);
+	}
+
+	@Transactional(transactionManager = "salesTransactionManager")
+	public MktResp<Void> allocate(String operId, List<String> customerIds, String userId) {
+		User operUser = userMapperEx.selectByPrimaryKey(operId);
+		User toUser = userMapperEx.selectByPrimaryKey(userId);
+		if (!toUser.getUserUp().equals(operId)) {
+			return MktResp.errorResp("no permission");
+		}
+		int associated = customerMapperEx.checkAssociated(customerIds, operId);
+		if (associated != customerIds.size()) {
+			return MktResp.errorResp("error system");
+		}
+		UserRole operRole = UserRole.role(operUser.getUserRole());
+		int status;
+		if (operRole.equals(UserRole.MANAGER)) {
+			status = CustomerStatus.SHORT_ASSOCIATED.flag();
+		} else {
+			status = CustomerStatus.POOL.flag();
+		}
+		int count = customerMapperEx.allocateAssociated(customerIds, userId, status);
+		return new MktResp<Void>();
 	}
 }

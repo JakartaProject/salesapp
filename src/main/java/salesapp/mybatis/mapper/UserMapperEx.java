@@ -14,8 +14,8 @@ import salesapp.mybatis.entity.UserEx;
 public interface UserMapperEx extends UserMapper {
     @Select({
         "select",
-        "user_id, user_name, user_mobile, user_account, user_pwd, user_init_pwd, user_role, user_up, ",
-        "user_status, user_remark, mysoft_user_code, ct",
+        "user_id, user_name, user_mobile, user_position, user_account, user_pwd, user_init_pwd, ",
+        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct",
         "from user",
         "where user_account = #{account,jdbcType=VARCHAR} and user_status = 1"
     })
@@ -23,6 +23,7 @@ public interface UserMapperEx extends UserMapper {
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_mobile", property="userMobile", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_position", property="userPosition", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_account", property="userAccount", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_pwd", property="userPwd", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_init_pwd", property="userInitPwd", jdbcType=JdbcType.VARCHAR),
@@ -37,8 +38,8 @@ public interface UserMapperEx extends UserMapper {
     
     @Select({
         "select",
-        "user_id, user_name, user_mobile, user_account, user_pwd, user_init_pwd, user_role, user_up, ",
-        "user_status, user_remark, mysoft_user_code, ct",
+        "user_id, user_name, user_mobile, user_position, user_account, user_pwd, user_init_pwd, ",
+        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct",
         "from user",
         "where mysoft_user_code = #{mysoftUserCode,jdbcType=VARCHAR} and user_status = 1"
     })
@@ -46,6 +47,7 @@ public interface UserMapperEx extends UserMapper {
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_mobile", property="userMobile", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_position", property="userPosition", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_account", property="userAccount", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_pwd", property="userPwd", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_init_pwd", property="userInitPwd", jdbcType=JdbcType.VARCHAR),
@@ -60,8 +62,8 @@ public interface UserMapperEx extends UserMapper {
     
     @Select({
         "select",
-        "user_id, user_name, user_mobile, user_account, user_pwd, user_init_pwd, user_role, user_up, ",
-        "user_status, user_remark, mysoft_user_code, ct,",
+        "user_id, user_name, user_mobile, user_position, user_account, user_pwd, user_init_pwd, ",
+        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct",
         "(select count(*) from customer where status != 0 and associated_user_id in ((select user_id from user where user_up = a.user_id) union select(a.user_id))) as customer_num, ",
         "(select count(*) from user where user_up = a.user_id) as next_level_num ",
         "from user a",
@@ -71,6 +73,7 @@ public interface UserMapperEx extends UserMapper {
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_mobile", property="userMobile", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_position", property="userPosition", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_account", property="userAccount", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_pwd", property="userPwd", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_init_pwd", property="userInitPwd", jdbcType=JdbcType.VARCHAR),
@@ -88,8 +91,8 @@ public interface UserMapperEx extends UserMapper {
     @Select({
     	"<script>",
         "select",
-        "user_id, user_name, user_mobile, user_account, user_pwd, user_init_pwd, user_role, user_up, ",
-        "user_status, user_remark, mysoft_user_code, ct",
+        "user_id, user_name, user_mobile, user_position, user_account, user_pwd, user_init_pwd, ",
+        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct",
         "from user ",
         "where user_status = 1 and user_up in ",
         "<foreach item='item' index='index' collection='uplevel'",
@@ -102,6 +105,7 @@ public interface UserMapperEx extends UserMapper {
         @Result(column="user_id", property="userId", jdbcType=JdbcType.VARCHAR, id=true),
         @Result(column="user_name", property="userName", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_mobile", property="userMobile", jdbcType=JdbcType.VARCHAR),
+        @Result(column="user_position", property="userPosition", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_account", property="userAccount", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_pwd", property="userPwd", jdbcType=JdbcType.VARCHAR),
         @Result(column="user_init_pwd", property="userInitPwd", jdbcType=JdbcType.VARCHAR),

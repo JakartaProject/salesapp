@@ -28,7 +28,9 @@ public class Customer implements Serializable {
 
     private Date firstRecvTime;
 
-    private Date lastCommentTime;
+    private Date lastFollowTime;
+
+    private String lastFollowId;
 
     private static final long serialVersionUID = 1L;
 
@@ -128,11 +130,19 @@ public class Customer implements Serializable {
         this.firstRecvTime = firstRecvTime;
     }
 
-    public Date getLastCommentTime() {
-        return lastCommentTime;
+    public Date getLastFollowTime() {
+        return lastFollowTime;
     }
 
-    public void setLastCommentTime(Date lastCommentTime) {
-        this.lastCommentTime = lastCommentTime;
+    public void setLastFollowTime(Date lastFollowTime) {
+        this.lastFollowTime = lastFollowTime;
+    }
+
+    public String getLastFollowId() {
+        return lastFollowId;
+    }
+
+    public void setLastFollowId(String lastFollowId) {
+        this.lastFollowId = lastFollowId;
     }
 }
