@@ -23,6 +23,9 @@ public class MktResp <T> {
 		resp.setMsg(msg);
 		return resp;
 	}
+	public boolean success() {
+		return SUCCESS.equals(code);
+	}
 	public String getCode() {
 		return code;
 	}
