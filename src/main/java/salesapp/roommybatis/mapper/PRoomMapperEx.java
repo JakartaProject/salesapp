@@ -16,9 +16,10 @@ public interface PRoomMapperEx extends PRoomMapper {
 			"<if test='areaFrom != null'> and YsBldArea &gt;= #{areaFrom} </if>",
 			"<if test='areaTo != null'> and YsBldArea &lt;= #{areaTo} </if>",
 			"<if test='priceFrom != null'> and PriceDj &gt;= #{priceFrom} </if>",
-			"<if test='priceto != null'> and PriceDj &lt;= #{priceTo} </if>",
+			"<if test='priceTo != null'> and PriceDj &lt;= #{priceTo} </if>",
 			"<if test='totalPriceFrom != null'> and TotalDj &gt;= #{totalPriceFrom} </if>",
-			"<if test='totalPriceto != null'> and TotalDj &lt;= #{totalPriceTo} </if>", "</script>" })
+			"<if test='totalPriceTo != null'> and TotalDj &lt;= #{totalPriceTo} </if>",
+			"order by RoomShortInfo","</script>" })
 	@Results({ @Result(column = "RoomGUID", property = "roomguid", jdbcType = JdbcType.CHAR, id = true),
 			@Result(column = "BUGUID", property = "buguid", jdbcType = JdbcType.CHAR),
 			@Result(column = "ProjGUID", property = "projguid", jdbcType = JdbcType.CHAR),

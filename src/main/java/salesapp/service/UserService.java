@@ -54,7 +54,7 @@ public class UserService {
 		tobeCreate.setMysoftUserCode(mysoftUserCode);
 		tobeCreate.setUserAccount(account);
 		tobeCreate.setUserId(UUID.get20());
-		tobeCreate.setUserPwd(RandomStringUtils.random(6));
+		tobeCreate.setUserPwd(RandomStringUtils.randomAlphabetic(6));
 		tobeCreate.setUserInitPwd(tobeCreate.getUserPwd());
 		tobeCreate.setUserRole(nextLevel.flag());
 		tobeCreate.setUserStatus(UserStatus.REGISTED.flag());
@@ -63,7 +63,19 @@ public class UserService {
 		if (count != 1) {
 			return MktResp.errorResp("system error");
 		}
+		tobeCreate.setUserPwd("");
 		return new MktResp<User>(tobeCreate);
+	}
+	
+	public MktResp<User> getUser(String userId) {
+		User user = userMapperEx.selectByPrimaryKey(userId);
+		return new MktResp<User>(user);
+	}
+
+	public List<UserEx> queryNextLevelList(String userId) {
+		List<UserEx> nextLevel = userMapperEx.selectRegistedExByUp(userId);
+		nextLevel.forEach(ue -> ue.setUserPwd(""));
+		return nextLevel;
 	}
 
 	public MktResp<User> queryNextLevelUser(String queryId, String userId) {
@@ -92,7 +104,7 @@ public class UserService {
 		userMapperEx.updateByPrimaryKey(user);
 		return new MktResp<Void>();
 	}
-	
+
 	public MktResp<Void> updateAccount(String userId, String newName, String newMobile, String position) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
 		user.setUserName(newName);
@@ -101,7 +113,7 @@ public class UserService {
 		userMapperEx.updateByPrimaryKey(user);
 		return new MktResp<Void>();
 	}
-	
+
 	public MktResp<Void> updatePassword(String userId, String oldpwd, String newpwd) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
 		if (!oldpwd.equals(user.getUserPwd())) {
@@ -145,12 +157,6 @@ public class UserService {
 		return new MktResp<Void>();
 	}
 
-	public List<UserEx> queryNextLevelList(String userId) {
-		List<UserEx> nextLevel = userMapperEx.selectRegistedExByUp(userId);
-		nextLevel.forEach(ue -> ue.setUserPwd(""));
-		return nextLevel;
-	}
-
 	@Transactional(transactionManager = "salesTransactionManager")
 	public MktResp<Void> transferResource(String operId, String fromId, String toId) {
 		if (fromId.equals(toId)) {
@@ -181,26 +187,34 @@ public class UserService {
 		List<User> users = new LinkedList<User>(Arrays.asList(new User[] { queryUser }));
 		NumInfo numInfo = new NumInfo();
 		if (role.compare(UserRole.ADMIN) >= 0) {
-			users = userMapperEx.selectRegistedByUplevel(ids);
-			ids.clear();
-			users.forEach(u -> ids.add(u.getUserId()));
-			numInfo.setGeneralManagerNum(users.size());
+			if (!ids.isEmpty()) {
+				users = userMapperEx.selectRegistedByUplevel(ids);
+				ids.clear();
+				users.forEach(u -> ids.add(u.getUserId()));
+				numInfo.setGeneralManagerNum(users.size());
+			}
 		}
 		if (role.compare(UserRole.GENERAL_MANAGER) >= 0) {
-			users = userMapperEx.selectRegistedByUplevel(ids);
-			ids.clear();
-			users.forEach(u -> ids.add(u.getUserId()));
-			numInfo.setManagerNum(users.size());
+			if (!ids.isEmpty()) {
+				users = userMapperEx.selectRegistedByUplevel(ids);
+				ids.clear();
+				users.forEach(u -> ids.add(u.getUserId()));
+				numInfo.setManagerNum(users.size());
+			}
 		}
 		if (role.compare(UserRole.MANAGER) >= 0) {
-			users = userMapperEx.selectRegistedByUplevel(ids);
-			ids.clear();
-			users.forEach(u -> ids.add(u.getUserId()));
-			numInfo.setSellerNum(users.size());
+			if (!ids.isEmpty()) {
+				users = userMapperEx.selectRegistedByUplevel(ids);
+				ids.clear();
+				users.forEach(u -> ids.add(u.getUserId()));
+				numInfo.setSellerNum(users.size());
+			}
 		}
 		if (role.compare(UserRole.SELLER) >= 0) {
-			List<Customer> customers = customerMapperEx.selectAssociatedCustomerByUser(ids, null);
-			numInfo.setCustomerNum(customers.size());
+			if (!ids.isEmpty()) {
+				List<Customer> customers = customerMapperEx.selectAssociatedCustomerByUser(ids, null);
+				numInfo.setCustomerNum(customers.size());
+			}
 		}
 		return numInfo;
 	}

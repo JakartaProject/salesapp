@@ -66,17 +66,24 @@ public class CustomerService {
 	public MktResp<List<CustomerEx>> myCustomer(String userId) {
 		User user = userMapperEx.selectByPrimaryKey(userId);
 		UserRole role = UserRole.role(user.getUserRole());
+		Set<String> allids = allNextUserId(userId, role);
+		return new MktResp<List<CustomerEx>>(customerMapperEx.selectMyCustomerOrderByFollowTime(allids));
+	}
+
+	private Set<String> allNextUserId(String userId, UserRole role) {
 		Set<String> allids = new HashSet<String>(Arrays.asList(new String[] { userId }));
 		List<String> ids = new LinkedList<String>(allids);
 		for (int i = 0; i < role.level(); i++) {
-			List<User> users = userMapperEx.selectRegistedByUplevel(ids);
-			ids.clear();
-			users.forEach(next -> {
-				allids.add(next.getUserId());
-				ids.add(next.getUserId());
-			});
+			if (!ids.isEmpty()) {
+				List<User> users = userMapperEx.selectRegistedByUplevel(ids);
+				ids.clear();
+				users.forEach(next -> {
+					allids.add(next.getUserId());
+					ids.add(next.getUserId());
+				});
+			}
 		}
-		return new MktResp<List<CustomerEx>>(customerMapperEx.selectMyCustomerOrderByFollowTime(allids));
+		return allids;
 	}
 
 	public MktResp<CustomerInfo> customerInfo(String userId, String customerId) {
@@ -86,7 +93,7 @@ public class CustomerService {
 		CustomerInfo info = new CustomerInfo();
 		info.setCustomerEx(customer);
 		info.setFollowEx(fs);
-		return new MktResp<CustomerInfo>();
+		return new MktResp<CustomerInfo>(info);
 	}
 
 	public static class CustomerInfo {
@@ -112,7 +119,7 @@ public class CustomerService {
 
 	@Transactional(transactionManager = "salesTransactionManager")
 	public MktResp<List<Customer>> searchCustomer(String userId, final String str) {
-		if (str.length() < 4) {
+		if (str == null || str.length() < 4) {
 			// avoid large scale result
 			return new MktResp<List<Customer>>(new LinkedList<Customer>());
 		}
@@ -122,12 +129,14 @@ public class CustomerService {
 		Set<String> allids = new HashSet<String>(Arrays.asList(new String[] { userId }));
 		List<String> ids = new LinkedList<String>(allids);
 		for (int i = 0; i < role.level(); i++) {
-			List<User> users = userMapperEx.selectRegistedByUplevel(ids);
-			ids.clear();
-			users.forEach(next -> {
-				allids.add(next.getUserId());
-				ids.add(next.getUserId());
-			});
+			if (!ids.isEmpty()) {
+				List<User> users = userMapperEx.selectRegistedByUplevel(ids);
+				ids.clear();
+				users.forEach(next -> {
+					allids.add(next.getUserId());
+					ids.add(next.getUserId());
+				});
+			}
 		}
 		List<Customer> ret = new LinkedList<Customer>();
 		list.forEach(customer -> {
@@ -174,9 +183,11 @@ public class CustomerService {
 		}
 		if (str == null || str.trim().length() < 4) {
 			str = null;
+		} else {
+			str = str.trim();
 		}
 		List<Customer> list = customerMapperEx.selectAssociatedCustomerByUser(Arrays.asList(new String[] { userId }),
-				str.trim());
+				str);
 		return new MktResp<List<Customer>>(list);
 	}
 
@@ -199,6 +210,46 @@ public class CustomerService {
 			status = CustomerStatus.POOL.flag();
 		}
 		int count = customerMapperEx.allocateAssociated(customerIds, userId, status);
+		return new MktResp<Void>();
+	}
+
+	@Transactional(transactionManager = "salesTransactionManager")
+	public MktResp<Void> lock(String operId, String customerId) {
+		User operUser = userMapperEx.selectByPrimaryKey(operId);
+		UserRole role = UserRole.role(operUser.getUserRole());
+		if (role.compare(UserRole.MANAGER) < 0) {
+			return MktResp.errorResp("no permission");
+		}
+		Customer customer = customerMapperEx.selectByPrimaryKey(customerId);
+		if (customer.getStatus() != CustomerStatus.SHORT_ASSOCIATED.flag()) {
+			return MktResp.errorResp("error status");
+		}
+		Set<String> allNextIds = allNextUserId(operId, role);
+		if (!allNextIds.contains(customerId)) {
+			return MktResp.errorResp("no permission");
+		}
+		customer.setStatus(CustomerStatus.LONG_ASSOCIATED.flag());
+		customerMapperEx.updateByPrimaryKeySelective(customer);
+		return new MktResp<Void>();
+	}
+
+	@Transactional(transactionManager = "salesTransactionManager")
+	public MktResp<Void> unlock(String operId, String customerId) {
+		User operUser = userMapperEx.selectByPrimaryKey(operId);
+		UserRole role = UserRole.role(operUser.getUserRole());
+		if (role.compare(UserRole.MANAGER) < 0) {
+			return MktResp.errorResp("no permission");
+		}
+		Customer customer = customerMapperEx.selectByPrimaryKey(customerId);
+		if (customer.getStatus() != CustomerStatus.LONG_ASSOCIATED.flag()) {
+			return MktResp.errorResp("error status");
+		}
+		Set<String> allNextIds = allNextUserId(operId, role);
+		if (!allNextIds.contains(customerId)) {
+			return MktResp.errorResp("no permission");
+		}
+		customer.setStatus(CustomerStatus.SHORT_ASSOCIATED.flag());
+		customerMapperEx.updateByPrimaryKeySelective(customer);
 		return new MktResp<Void>();
 	}
 }

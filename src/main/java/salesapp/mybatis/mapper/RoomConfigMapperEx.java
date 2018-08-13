@@ -1,5 +1,6 @@
 package salesapp.mybatis.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -16,5 +17,5 @@ public interface RoomConfigMapperEx extends RoomConfigMapper {
 			@Result(column = "price", property = "price", jdbcType = JdbcType.BIGINT),
 			@Result(column = "total", property = "total", jdbcType = JdbcType.BIGINT),
 			@Result(column = "ct", property = "ct", jdbcType = JdbcType.DATE) })
-	public RoomConfig selectByTowerAndRoom(String towerType, String roomType);
+	public RoomConfig selectByTowerAndRoom(@Param("towerType") String towerType, @Param("roomType") String roomType);
 }

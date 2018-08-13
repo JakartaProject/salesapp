@@ -33,6 +33,7 @@ public class RoomService {
 
 	private SimpleRoom simple(PRoom room) {
 		SimpleRoom simple = new SimpleRoom();
+		simple.setRoomGUID(room.getRoomguid());
 		simple.setArea(room.getBldarea());
 		simple.setPrice(room.getPricedj());
 		simple.setTotalPrice(room.getTotaldj());
@@ -94,6 +95,7 @@ public class RoomService {
 	}
 
 	public static class SimpleRoom {
+		private String roomGUID;
 		private BigDecimal area;
 		private BigDecimal price;
 		private BigDecimal totalPrice;
@@ -179,6 +181,12 @@ public class RoomService {
 		}
 		public void setRoomNo(String roomNo) {
 			this.roomNo = roomNo;
+		}
+		public String getRoomGUID() {
+			return roomGUID;
+		}
+		public void setRoomGUID(String roomGUID) {
+			this.roomGUID = roomGUID;
 		}
 	}
 

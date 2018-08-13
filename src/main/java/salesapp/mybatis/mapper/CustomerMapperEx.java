@@ -75,7 +75,7 @@ public interface CustomerMapperEx extends CustomerMapper {
         @Result(column="last_follow_time", property="lastFollowTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="last_follow_id", property="lastFollowId", jdbcType=JdbcType.VARCHAR)
     })
-    Customer selectByMobileAndSocialId(String mobile, String socialId);
+    Customer selectByMobileAndSocialId(@Param("mobile") String mobile, @Param("socialId") String socialId);
 
     @Select({
         "select",
@@ -101,7 +101,7 @@ public interface CustomerMapperEx extends CustomerMapper {
         @Result(column="last_follow_time", property="lastFollowTime", jdbcType=JdbcType.TIMESTAMP),
         @Result(column="last_follow_id", property="lastFollowId", jdbcType=JdbcType.VARCHAR)
     })
-	public List<Customer> searchNameMobileSocialid(String str);
+	public List<Customer> searchNameMobileSocialid(@Param("str") String str);
 
     @Select({
     	"<script>",

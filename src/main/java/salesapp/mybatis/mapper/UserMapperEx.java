@@ -63,7 +63,7 @@ public interface UserMapperEx extends UserMapper {
     @Select({
         "select",
         "user_id, user_name, user_mobile, user_position, user_account, user_pwd, user_init_pwd, ",
-        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct",
+        "user_role, user_up, user_status, user_remark, mysoft_user_code, ct, ",
         "(select count(*) from customer where status != 0 and associated_user_id in ((select user_id from user where user_up = a.user_id) union select(a.user_id))) as customer_num, ",
         "(select count(*) from user where user_up = a.user_id) as next_level_num ",
         "from user a",
