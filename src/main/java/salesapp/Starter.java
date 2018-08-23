@@ -20,6 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 public class Starter {
+	// 新需求
+	// 1、维持我的消息
+	// 2.增加查房条件
+	// 3.客户可以在系统保持多份备份，每个销售都可以增加一个备份，避免销售之间查看各自跟进信息，导致矛盾
 	public static void main(String[] args) {
 		SpringApplication.run(Starter.class, args);
 	}
